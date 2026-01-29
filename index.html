@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Osma Education</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        /* ===== BASE ===== */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(180deg, #F8BBD0, #E1BEE7, #FFF9C4);
+            color: #333;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(90deg, #6A1B9A, #EC407A, #FFD54F);
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 10px;
+            background: linear-gradient(90deg, #6A1B9A, #EC407A);
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            margin: 8px 15px;
+            background: #F06292;
+            padding: 8px 14px;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        nav a:hover {
+            background: gold;
+            color: #6A1B9A;
+        }
+
+        section {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #FFFFFF, #FCE4EC);
+            border: 3px dashed #F48FB1;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3 {
+            font-family: "Comic Sans MS", "Arial Rounded MT Bold", cursive;
+            letter-spacing: 1px;
+            color: #6A1B9A;
+            margin-top: 0;
+        }
+
+        .programs, .gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* ← INI YANG PENTING */
+    gap: 18px;
+}
+
+.gallery img {
+    width: 100%;
+    height: 220px;          /* ← samakan tinggi gambar */
+    object-fit: cover;     /* ← biar tidak terpotong aneh */
+    border-radius: 12px;
+}
+
+
+        .box {
+            text-align: center;
+            background: linear-gradient(135deg, #F3E5F5, #FCE4EC);
+            border: 3px solid #BA68C8;
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .box::after {
+            content: "★";
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            color: gold;
+            font-size: 18px;
+        }
+
+        .box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(236,64,122,0.4);
+        }
+
+        .cta {
+            text-align: center;
+        }
+
+        .cta a {
+            display: inline-block;
+            background: linear-gradient(90deg, #EC407A, #6A1B9A);
+            color: white;
+            padding: 15px 30px;
+            font-weight: bold;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-decoration: none;
+            font-size: 18px;
+            box-shadow: 0 0 15px gold;
+        }
+
+        .cta a:hover {
+            background: linear-gradient(90deg, #FFD54F, #EC407A);
+            color: #333;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            margin-top: 40px;
+            color: white;
+            background: linear-gradient(90deg, #6A1B9A, #EC407A, #FFD54F);
+        }
+
+        .pengajar-box img {
+            width: 200px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 4px solid gold;
+        }
+
+        /* ===== MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 999;
+        }
+
+        .modal-box {
+            background: linear-gradient(135deg, #FFF1F8, #F3E5F5);
+            border: 4px solid #EC407A;
+            max-width: 420px;
+            margin: 80px auto;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-box input,
+        .modal-box textarea,
+        .modal-box select,
+        .modal-box button {
+            width: 100%;
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .modal-box select {
+            background: #F5F9FF;
+        }
+
+        .modal-box button {
+            background: linear-gradient(90deg, #EC407A, #6A1B9A);
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+
+        .modal-box button:hover {
+            background: linear-gradient(90deg, #FFD54F, #EC407A);
+            color: #333;
+        }
+
+        .close-modal {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+
+    width: 22px;
+    height: 22px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background: transparent;
+    border: none;
+
+    font-size: 16px;
+    font-weight: bold;
+    color: #666;
+
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.close-modal:hover {
+    color: #F44336;
+}
+
+
+        /* ===== ANIMASI ===== */
+        @keyframes bounceCute {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        @keyframes wiggle {
+            0% { transform: rotate(0); }
+            25% { transform: rotate(3deg); }
+            50% { transform: rotate(-3deg); }
+            75% { transform: rotate(3deg); }
+            100% { transform: rotate(0); }
+        }
+
+        .logo-osma {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto 12px auto;
+            background: white;
+            padding: 6px;
+            animation: bounceCute 3s infinite;
+        }
+
+        section {
+            animation: fadeInKids 1s ease;
+        }
+
+        @keyframes fadeInKids {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* ===== COUNTER ===== */
+        .counter {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .counter h2 {
+            color: #EC407A;
+            font-size: 26px;
+            text-align: center;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media screen and (max-width: 768px) {
+            body { font-size: 14px; }
+
+            nav {
+                flex-direction: column;
+                gap: 6px;
+                padding: 5px;
+            }
+
+            nav a {
+                margin: 5px 0;
+                font-size: 14px;
+                padding: 8px 12px;
+            }
+
+            section {
+                margin: 20px 10px;
+                padding: 20px;
+            }
+
+            .programs, .gallery {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .box {
+                padding: 15px;
+                font-size: 14px;
+            }
+
+            .pengajar-box img { width: 150px; }
+
+            .gallery img { height: 150px; }
+
+            .cta a { padding: 12px 20px; font-size: 16px; }
+
+            .counter {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .counter h2 { font-size: 22px; }
+
+            header h1 { font-size: 24px; }
+            header p { font-size: 14px; }
+        }
+
+        /* ===== FIX MUTLAK TOMBOL X (ANTI MELEBAR) ===== */
+.modal-box > .close-modal {
+    position: absolute !important;
+    top: 8px !important;
+    right: 8px !important;
+
+    width: 18px !important;
+    height: 18px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    background: transparent !important;
+    border: none !important;
+
+    font-size: 14px !important;
+    line-height: 1 !important;
+
+    cursor: pointer !important;
+}
+
+/* pastikan aturan button 100% TIDAK kena X */
+.modal-box button:not(.close-modal) {
+    width: 100%;
+}
+/* ===== AKHIR FIX ===== */
+
+/* ===== FIX FINAL TOMBOL X + BLOK WARNA ===== */
+.modal-box > .close-modal {
+    position: absolute !important;
+    top: 8px !important;
+    right: 8px !important;
+
+    width: 22px !important;
+    height: 22px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    background: #EC407A !important;   /* WARNA BLOK */
+    color: white !important;
+
+    border-radius: 6px !important;    /* kotak kecil (ganti 50% kalau mau bulat) */
+    border: none !important;
+
+    font-size: 14px !important;
+    line-height: 1 !important;
+
+    cursor: pointer !important;
+}
+
+/* Hover biar kelihatan hidup */
+.modal-box > .close-modal:hover {
+    background: #D81B60 !important;
+}
+
+/* pastikan button lain tetap full */
+.modal-box button:not(.close-modal) {
+    width: 100%;
+}
+/* ===== AKHIR FIX ===== */
+
+/* ===================================================
+   MODAL FULLSCREEN KHUSUS HP (TANPA UBAH KODE ASLI)
+   =================================================== */
+@media screen and (max-width: 480px) {
+
+    /* background modal full layar */
+    .modal {
+        padding: 0;
+    }
+
+    /* modal box jadi fullscreen */
+    .modal-box {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
+
+        margin: 0 !important;
+        border-radius: 0 !important;
+
+        padding: 20px 14px 30px 14px !important;
+
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* judul modal */
+    .modal-box h3 {
+        margin-top: 10px;
+        font-size: 18px;
+    }
+
+    /* tombol utama di modal */
+    .modal-box button:not(.close-modal) {
+        font-size: 14px;
+        padding: 12px;
+        border-radius: 10px;
+    }
+
+    /* form input */
+    .modal-box input,
+    .modal-box select,
+    .modal-box textarea {
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    /* tombol X tetap pojok kanan atas */
+    .modal-box > .close-modal {
+        position: fixed !important;
+        top: 10px !important;
+        right: 10px !important;
+
+        width: 28px !important;
+        height: 28px !important;
+
+        font-size: 16px !important;
+        border-radius: 6px !important;
+        z-index: 1000 !important;
+    }
+}
+/* ==================== END FULLSCREEN MODAL HP ==================== */
+
+/* ===================================================
+   MOBILE LAYOUT FIX – DESKTOP STYLE LOOK
+   =================================================== */
+@media screen and (max-width: 768px) {
+
+    /* ===== BODY ===== */
+    body {
+        overflow-x: hidden;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+        text-align: center;
+        padding: 24px 16px;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px;
+    }
+
+    nav a {
+        width: 100%;
+        text-align: center;
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    /* ===== SECTION ===== */
+    section {
+        max-width: 100%;
+        margin: 16px auto;
+        padding: 20px 16px;
+    }
+
+    /* ===== PROGRAM & GALLERY GRID ===== */
+    .programs,
+    .gallery {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    /* ===== BOX ===== */
+    .box {
+        padding: 16px;
+        text-align: center;
+    }
+
+    /* ===== GALLERY IMAGE FIX (FULL, TIDAK TERPOTONG) ===== */
+    .gallery img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        border-radius: 12px;
+    }
+
+    /* ===== COUNTER ===== */
+    .counter {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        text-align: center;
+    }
+
+    /* ===== CTA ===== */
+    .cta a {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 14px;
+        font-size: 15px;
+    }
+}
+
+/* ===================================================
+   MOBILE FORCE DESKTOP GRID (JANGAN UBAH KODE ASLI)
+   =================================================== */
+@media screen and (max-width: 768px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
+    /* ================= PROGRAM / BOX ================= */
+    .programs {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 12px;
+    }
+
+    .programs .box {
+        padding: 14px;
+        font-size: 13px;
+    }
+
+    /* ================= GALLERY ================= */
+    .gallery {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 10px;
+    }
+
+    /* 2 BARIS (AUTO DARI JUMLAH FOTO) */
+    .gallery img {
+        width: 100%;
+        height: auto !important;
+        object-fit: contain !important;
+        border-radius: 10px;
+    }
+
+    /* ================= SECTION ================= */
+    section {
+        padding: 16px;
+        margin: 14px auto;
+    }
+
+    /* ================= COUNTER ================= */
+    .counter {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .counter h2 {
+        font-size: 15px;
+    }
+
+    /* ================= NAV ================= */
+    nav {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    nav a {
+        text-align: center;
+        padding: 10px;
+        font-size: 13px;
+    }
+}
+
+/* ===================================================
+   FORCE DESKTOP LAYOUT ON FULLSCREEN HP
+   (TANPA UBAH KODE ASLI)
+   =================================================== */
+@media screen and (max-width: 768px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
+    /* ================= PROGRAM ================= */
+    .programs {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 20px !important;
+    }
+
+    .programs .box {
+        padding: 18px !important;
+        font-size: 14px !important;
+    }
+
+    /* ================= PENGAJAR ================= */
+    .pengajar,
+    .pengajar-wrapper,
+    .pengajar-container {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 20px !important;
+    }
+
+    .pengajar-box {
+        text-align: center;
+    }
+
+    .pengajar-box img {
+        width: 100% !important;
+        max-width: 200px;
+        height: 200px !important;
+        object-fit: cover !important;
+        border-radius: 12px;
+    }
+
+    /* ================= GALLERY ================= */
+    .gallery {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 15px !important;
+    }
+
+    .gallery img {
+        width: 100% !important;
+        height: 180px !important;
+        object-fit: cover !important;
+        border-radius: 12px;
+    }
+
+    /* ================= COUNTER ================= */
+    .counter {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .counter h2 {
+        font-size: 18px !important;
+    }
+
+    /* ================= SECTION ================= */
+    section {
+        margin: 20px auto !important;
+        padding: 24px !important;
+    }
+
+    /* ================= MODAL (FULLSCREEN HP) ================= */
+    .modal-box {
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: none !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        overflow-y: auto;
+    }
+}
+
+/* ===================================================
+   FORCE DESKTOP LAYOUT ON FULLSCREEN HP (FINAL)
+   =================================================== */
+@media screen and (max-width: 768px) {
+
+    /* ================= NAVBAR ================= */
+    nav {
+        flex-direction: row !important;
+        justify-content: center !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        gap: 10px;
+        padding: 12px 10px !important;
+    }
+
+    nav a {
+        flex: 0 0 auto;
+        font-size: 14px !important;
+        padding: 8px 16px !important;
+        border-radius: 20px !important;
+        white-space: nowrap;
+    }
+
+    /* ================= PROGRAM ================= */
+    .programs {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 20px !important;
+    }
+
+    .programs .box {
+        padding: 18px !important;
+        font-size: 14px;
+    }
+
+    /* ================= PENGAJAR ================= */
+    #pengajar .programs {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 20px !important;
+    }
+
+    .pengajar-box img {
+        width: 100% !important;
+        height: 200px !important;
+        object-fit: cover !important;
+        border-radius: 12px !important;
+    }
+
+    /* ================= GALERI ================= */
+    .gallery {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 15px !important;
+    }
+
+    .gallery img {
+        width: 100% !important;
+        height: 180px !important;
+        object-fit: cover !important;
+        border-radius: 12px !important;
+    }
+
+    /* ================= COUNTER ================= */
+    .counter {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 15px;
+        text-align: center;
+    }
+
+    /* ================= SECTION ================= */
+    section {
+        margin: 25px auto !important;
+        padding: 25px !important;
+    }
+
+    /* ================= MODAL FULLSCREEN ================= */
+    .modal-box {
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: none !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        overflow-y: auto;
+    }
+}
+
+/* ===================================================
+   FIX NAVBAR & PENGAJAR — HP FULLSCREEN DESKTOP STYLE
+   =================================================== */
+@media screen and (max-width: 768px) {
+
+    /* ================= NAVBAR (RAPIH TANPA SCROLL) ================= */
+    nav {
+        display: flex !important;
+        flex-wrap: wrap !important;          /* BARIS, BUKAN SCROLL */
+        justify-content: center !important;
+        gap: 10px !important;
+        padding: 12px !important;
+        overflow: hidden !important;         /* MATIKAN GESER */
+    }
+
+    nav a {
+        font-size: 14px !important;
+        padding: 8px 18px !important;
+        border-radius: 20px !important;
+        white-space: nowrap;
+    }
+
+    /* ================= PROFIL PENGAJAR ================= */
+    #pengajar .programs {
+        display: flex !important;
+        justify-content: center !important;  /* TENGAH */
+        align-items: stretch;
+    }
+
+    .pengajar-box {
+        max-width: 420px !important;         /* SEPERTI DESKTOP */
+        width: 100%;
+        text-align: center;
+    }
+
+    .pengajar-box img {
+        width: 200px !important;
+        height: 200px !important;
+        object-fit: cover !important;
+        border-radius: 15px !important;
+        margin: 0 auto 15px auto;
+        display: block;
+    }
+
+    /* ================= JAGA GALERI (JANGAN BERUBAH) ================= */
+    .gallery {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+
+    .gallery img {
+        height: 180px !important;
+        object-fit: cover !important;
+    }
+}
+
+/* ===================================================
+   FIX FINAL NAVBAR — HP JADI SEPERTI DESKTOP
+   =================================================== */
+@media screen and (max-width: 768px) {
+
+    /* PAKSA NAVBAR JADI MENYAMPING */
+    nav {
+        display: flex !important;
+        flex-direction: row !important;      /* INI KUNCI UTAMA */
+        flex-wrap: wrap !important;          /* TURUN BARIS JIKA TIDAK MUAT */
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 10px !important;
+
+        overflow-x: hidden !important;       /* ANTI GESER */
+        overflow-y: visible !important;
+    }
+
+    /* TOMBOL NAV */
+    nav a {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 14px !important;
+        padding: 8px 18px !important;
+        border-radius: 22px !important;
+
+        white-space: nowrap !important;
+        width: auto !important;              /* ANTI FULL WIDTH */
+        margin: 0 !important;
+    }
+}
+
+/* ================= FOOTER FINAL RAPI ================= */
+
+.footer {
+    background: #0D47A1;
+    color: white;
+    padding: 35px 20px 20px;
+}
+
+.footer-inner {
+    max-width: 600px;          /* KUNCI: biar tidak melebar */
+    margin-left: 0;            /* PAKSA KIRI */
+    text-align: left;
+}
+
+/* Judul */
+.footer-inner h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #FFEB3B;
+}
+
+/* Lokasi */
+.footer-location {
+    margin-top: 15px;
+}
+
+.location-icon {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #FFEB3B;
+}
+
+/* MAPS FIX (KECIL & TIDAK CENTER) */
+.footer-location iframe {
+    width: 100%;
+    max-width: 360px;      /* ukuran profesional */
+    height: 160px;
+    border: none;
+    border-radius: 10px;
+    display: block;        /* anti center */
+    box-shadow: 0 5px 14px rgba(0,0,0,0.35);
+}
+
+/* COPYRIGHT */
+.footer-copy {
+    margin-top: 25px;
+    text-align: center;
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+/* ================= MOBILE ================= */
+@media screen and (max-width: 768px) {
+    .footer-inner {
+        max-width: 100%;
+    }
+
+    .footer-location iframe {
+        max-width: 100%;
+        height: 180px;
+    }
+}
+
+/* ================= OVERRIDE MAPS FOOTER (LEBIH KECIL & RAPI) ================= */
+.footer-location iframe {
+    max-width: 280px !important;   /* LEBIH KECIL */
+    height: 130px !important;      /* PROPORSIONAL */
+    border-radius: 8px !important;
+}
+
+/* Mobile lebih kecil lagi */
+@media screen and (max-width: 480px) {
+    .footer-location iframe {
+        max-width: 100% !important;
+        height: 140px !important;
+    }
+}
+
+
+
+/* ================= OVERRIDE WARNA FOOTER ================= */
+footer {
+    background: linear-gradient(90deg, #d219b0, #0D47A1) !important;
+    color: #E3F2FD !important;
+}
+
+/* Judul & teks footer */
+footer h3,
+footer p,
+footer span {
+    color: #E3F2FD !important;
+}
+
+/* Garis pemisah (jika ada) */
+footer hr {
+    border-color: rgba(227, 242, 253, 0.3) !important;
+}
+
+/* Link footer */
+footer a {
+    color: #BBDEFB !important;
+}
+
+footer a:hover {
+    color: #FFFFFF !important;
+}
+
+    </style>
+</head>
+
+<body>
+
+<header>
+    <img src="logo/logo osma.jpeg" class="logo-osma" alt="Logo Osma Education">
+    <h1>Osma Education</h1>
+    <p>Nyaman Belajarnya, Tumbuh Prestasinya</p>
+</header>
+
+<nav>
+    <a href="#home">Home</a>
+    <a href="#about">Visi & Misi</a>
+    <a href="#program">Program</a>
+    <a href="#pengajar">Pengajar</a>
+    <a href="#galeri">Galeri</a>
+    <a href="#cta">Daftar</a>
+</nav>
+
+<section id="home">
+    <h2>Selamat Datang</h2>
+    <p>Osma Education hadir untuk membantu anak-anak belajar membaca, menulis, dan berhitung.</p>
+    <div class="counter">
+        <h2><span data-count="50">0</span>+ Murid</h2>
+        <h2><span data-count="6">0</span> Program</h2>
+        <h2><span data-count="100">0</span>% Pendamping</h2>
+    </div>
+</section>
+
+<section id="about">
+    <h2>Visi & Misi</h2>
+    <p><strong>Visi:</strong> Menjadi bimbingan belajar yang nyaman, terpercaya, dan berorientasi pada tumbuhnya prestasi serta karakter positif peserta didik.</p>
+    <p><strong>Misi:</strong></p>
+    <ul>
+        <li>Menyediakan lingkungan belajar yang nyaman, aman, dan menyenangkan seperti di rumah.</li>
+        <li>Memberikan pendampingan belajar yang personal dan penuh perhatian sesuai kebutuhan anak.</li>
+        <li>Menumbuhkan prestasi akademik melalui proses belajar yang terarah dan konsisten.</li>
+        <li>Membentuk sikap positif dalam belajar: percaya diri, mandiri, dan bertanggung jawab.</li>
+        <li>Menjalin kerja sama yang baik dengan orang tua dalam mendukung perkembangan anak.</li>
+    </ul>
+</section>
+
+<section id="program">
+    <h2>Program Bimbel</h2>
+    <div class="programs">
+        <div class="box"><h3>Calistung</h3><p>Pengenalan huruf dan angka</p><p><strong>Sesi:</strong> Pagi & Malam</p></div>
+        <div class="box"><h3>SD</h3><p>Matematika, Bahasa Indonesia, IPAS</p><p><strong>Sesi:</strong> Pagi & Malam</p></div>
+        <div class="box"><h3>SMP</h3><p>Matematika, Bahasa Inggris</p><p><strong>Sesi:</strong> Pagi & Malam</p></div>
+        <div class="box"><h3>SMA</h3><p>Matematika, Bahasa Inggris</p><p><strong>Sesi:</strong> Pagi & Malam</p></div>
+        <div class="box"><h3>Kursus Bahasa Inggris</h3><p>Kosakata & Percakapan</p><p><strong>Sesi:</strong> Pagi & Malam</p></div>
+        <div class="box"><h3>Kursus Komputer</h3><p>Dasar komputer</p><p><strong>Sesi:</strong> Pagi & Malam</p></div>
+    </div>
+</section>
+
+<section id="pengajar">
+    <h2>Profil Pengajar</h2>
+    <div class="programs">
+        <div class="box pengajar-box">
+            <img src="foto pengajar/foto pengajar.jpeg">
+            <h3>Wahyu Puji Lestari, S.Pd</h3>
+            <p>
+Lulusan Sarjana Pendidikan (S.Pd) yang berpengalaman dalam mendampingi anak-anak belajar. 
+Mengutamakan pendekatan yang sabar, ramah, dan menyenangkan agar anak merasa nyaman, percaya diri, serta termotivasi dalam belajar.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section id="galeri">
+    <h2>Galeri Kegiatan</h2>
+    <div class="gallery">
+        <div class="box"><img src="galeri kegiatan/galeri kegiatan 1.jpeg"></div>
+        <div class="box"><img src="galeri kegiatan/galeri kegiatan 2.jpeg"></div>
+        <div class="box"><img src="galeri kegiatan/galeri kegiatan 3.jpeg"></div>
+        <div class="box"><img src="galeri kegiatan/galeri kegiatan 4.jpeg"></div>
+        <div class="box"><img src="galeri kegiatan/galeri kegiatan 5.jpeg"></div>
+        <div class="box"><img src="galeri kegiatan/galeri kegiatan 6.jpeg"></div>
+    </div>
+</section>
+
+<section id="cta" class="cta">
+    <h2>Ayo Daftarkan Anak Anda Sekarang</h2>
+    <a href="#" id="btnDaftarWA">Daftar via WhatsApp</a>
+</section>
+
+
+
+
+<!-- ===== MODAL ===== -->
+<div class="modal" id="modal">
+    <div class="modal-box">
+        <button class="close-modal" onclick="modal.style.display='none'">✕</button>
+        <h3>Pilih Opsi</h3>
+        <button id="btnForm">Daftar Sekarang</button>
+        <button onclick="window.open('https://wa.me/6285820869690')">Konsultasi</button>
+
+        <div id="form" style="display:none">
+            <input placeholder="Nama Anak">
+            <input placeholder="Nama Orang Tua">
+            <select id="selectProgram">
+                <option value="">Pilih Program</option>
+                <option>Calistung</option>
+                <option>SD</option>
+                <option>SMP</option>
+                <option>SMA</option>
+                <option>Kursus Bahasa Inggris</option>
+                <option>Kursus Komputer</option>
+            </select>
+            <select id="selectSesi">
+                <option value="">Pilih Sesi Kelas</option>
+                <option>Pagi</option>
+                <option>Malam</option>
+            </select>
+            <textarea placeholder="Catatan"></textarea>
+            <button id="btnKirim">Kirim ke WhatsApp</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== SCRIPT ===== -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const btnDaftarWA = document.getElementById("btnDaftarWA");
+    const modal = document.getElementById("modal");
+    const btnForm = document.getElementById("btnForm");
+    const form = document.getElementById("form");
+    const btnKirim = document.getElementById("btnKirim");
+    const selectProgram = document.getElementById("selectProgram");
+    const selectSesi = document.getElementById("selectSesi");
+    const textarea = form.querySelector("textarea");
+
+    btnDaftarWA.addEventListener("click", e => {
+        e.preventDefault();
+        modal.style.display = "block";
+    });
+
+    btnForm.addEventListener("click", () => {
+        form.style.display = "block";
+    });
+
+    btnKirim.addEventListener("click", () => {
+        const inputs = form.querySelectorAll("input");
+        const namaAnak = inputs[0].value.trim();
+        const namaOrtu = inputs[1].value.trim();
+        const catatan = textarea.value.trim();
+
+        if (!namaAnak || !namaOrtu || !selectProgram.value || !selectSesi.value) {
+            alert("Nama Anak, Orang Tua, Program dan Sesi wajib diisi");
+            return;
+        }
+
+        const pesan = `PENDAFTARAN OSMA EDUCATION\n\nNama Anak: ${namaAnak}\nNama Orang Tua: ${namaOrtu}\nProgram: ${selectProgram.value}\nSesi: ${selectSesi.value}\nCatatan: ${catatan}`;
+
+        window.open(`https://wa.me/6285820869690?text=${encodeURIComponent(pesan)}`, "_blank");
+    });
+
+    // COUNTER ANIMASI
+    document.querySelectorAll("[data-count]").forEach(counter => {
+        let value = 0;
+        const target = +counter.dataset.count;
+        const run = setInterval(() => {
+            value += Math.ceil(target / 50);
+            if (value >= target) { value = target; clearInterval(run); }
+            counter.innerText = value;
+            counter.style.transform = "scale(1.2)";
+            setTimeout(()=>counter.style.transform="scale(1)",150);
+        }, 40);
+    });
+
+    // MODAL CLOSE
+    const modalBox = document.querySelector(".modal-box");
+    const closeBtn = document.querySelector(".close-modal");
+    modalBox.addEventListener("click", e => e.stopPropagation());
+    closeBtn.addEventListener("click", e => { e.stopPropagation(); modal.style.display = "none"; });
+});
+</script>
+
+<footer class="footer">
+    <div class="footer-inner">
+
+        <h2>Kontak Kami</h2>
+    <p>📍 Jl. Sultan Hasanuddin RT 07 No 23A Kariangau</p>
+    <p>📞 <a href="https://wa.me/628582086">085820869690</a></p>
+    <p>✉️ osmaeducation@gmail.com</p>
+    
+        <div class="footer-location">
+            <span class="location-icon">📍 Lokasi Kami</span>
+            <iframe
+  src="https://www.google.com/maps?q=Osma+Education+Kariangau+Jl+Sultan+Hasanuddin&output=embed"
+  loading="lazy"
+  style="border:0; width:100%; height:160px; border-radius:10px;"
+  referrerpolicy="no-referrer-when-downgrade">
+</iframe>
+
+
+        </div>
+
+    </div>
+
+    <div class="footer-copy">
+        © 2026 Osma Education
+    </div>
+</footer>
+
+</body>
+</html>
